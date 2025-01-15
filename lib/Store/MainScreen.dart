@@ -11,6 +11,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 1;
+  final Color primaryColor = Color(0xFF26547D);
 
   final List<Widget> _pages = [
     CommunityPage(),
@@ -24,9 +25,9 @@ class _MainScreenState extends State<MainScreen> {
       extendBody: true,
       body: _pages[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.teal.shade100,
-        color: Colors.teal,
-        buttonBackgroundColor: Colors.teal,
+        backgroundColor: primaryColor.withOpacity(0.6),
+        color: primaryColor,
+        buttonBackgroundColor: primaryColor,
         height: 60,
         index: _currentIndex,
         animationDuration: Duration(milliseconds: 300),
