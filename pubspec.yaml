@@ -72,6 +72,8 @@ flutter:
     - assets/
     - assets/Home/
     - assets/Community/
+    - assets/icons/
+    - assets/Initial/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

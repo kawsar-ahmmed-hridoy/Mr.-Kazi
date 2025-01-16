@@ -6,6 +6,7 @@ import 'package:mr_kazi/Account/NeedHelpPage.dart';
 import 'package:mr_kazi/Account/PremierDeliveryPage.dart';
 import 'package:mr_kazi/Account/SocialAccountsPage.dart';
 import 'package:mr_kazi/Account/TellUsWhatYouThinkPage.dart';
+import 'package:mr_kazi/Intro/SigninScreen.dart';
 
 
 class AccountPage extends StatelessWidget {
@@ -156,7 +157,7 @@ class AccountPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/home'); // Add logout functionality here
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SigninScreen()),);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF44336),
