@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mr_kazi/Community/NotificationsPage.dart';
 import 'package:mr_kazi/Home/Kazi_AI.dart';
 import 'package:mr_kazi/Home/MechanicsListPage.dart';
 import 'package:mr_kazi/Home/RecentlyDiagonsticResultsPage.dart';
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage()),);},
           ),
         ],
       ),

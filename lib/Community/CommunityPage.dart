@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mr_kazi/Community/ChatPage.dart';
+import 'package:mr_kazi/Community/NotificationsPage.dart';
 
 class CommunityApp extends StatelessWidget {
   @override
@@ -183,7 +184,7 @@ class _CommunityPageState extends State<CommunityPage> {
           ),
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.blue),
-            onPressed: () {},
+            onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage()),);},
           ),
           IconButton(
             icon: Icon(Icons.message, color: Colors.white),

@@ -158,9 +158,7 @@ class AccountPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home'); // Add logout functionality here
-                  },
+                  onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SigninScreen()));},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF44336),
                     shape: RoundedRectangleBorder(
@@ -174,7 +172,7 @@ class AccountPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SigninScreen()));},
+                  onPressed: () => Navigator.pop(context),
                   child: const Text(
                     'Cancel',
                     style: TextStyle(color: Colors.grey),
