@@ -1,135 +1,177 @@
 import 'package:flutter/material.dart';
 import 'package:mr_kazi/Home/MechanicsListPage.dart';
 
-class ServicesPage extends StatelessWidget {
+class ServicesPage extends StatefulWidget {
+  @override
+  _ServicesPageState createState() => _ServicesPageState();
+}
+
+class _ServicesPageState extends State<ServicesPage> {
   final List<ServiceItem> services = [
-    ServiceItem("Cleaning", Icons.cleaning_services, Colors.blue),
-    ServiceItem("Beauty", Icons.face, Colors.pink),
-    ServiceItem("AC Repair", Icons.ac_unit, Colors.cyan),
-    ServiceItem("Salon", Icons.content_cut, Colors.deepPurple),
-    ServiceItem("Carpenter", Icons.handyman, Colors.brown),
-    ServiceItem("Electricians", Icons.electrical_services, Colors.amber),
-    ServiceItem("Home Cleaning", Icons.home, Colors.green),
-    ServiceItem("Painting", Icons.format_paint, Colors.orange),
-    ServiceItem("Repair", Icons.build, Colors.red),
-    ServiceItem("Massage", Icons.spa, Colors.purple),
-    ServiceItem("Therapy", Icons.healing, Colors.teal),
-    ServiceItem("Plumbers", Icons.plumbing, Colors.indigo),
-    ServiceItem("Gardening", Icons.grass, Colors.lightGreen),
-    ServiceItem("Pet Care", Icons.pets, Colors.orangeAccent),
-    ServiceItem("Laundry", Icons.local_laundry_service, Colors.blueAccent),
-    ServiceItem("Moving", Icons.move_to_inbox, Colors.deepOrange),
-    ServiceItem("Cooking", Icons.kitchen, Colors.brown.shade400),
-    ServiceItem("Tutoring", Icons.school, Colors.deepPurpleAccent),
+    ServiceItem("Cleaning", Icons.cleaning_services),
+    ServiceItem("Beauty", Icons.face),
+    ServiceItem("AC Repair", Icons.ac_unit),
+    ServiceItem("Salon", Icons.content_cut),
+    ServiceItem("Carpenter", Icons.handyman),
+    ServiceItem("Electricians", Icons.electrical_services),
+    ServiceItem("Home Cleaning", Icons.home),
+    ServiceItem("Painting", Icons.format_paint),
+    ServiceItem("Repair", Icons.build),
+    ServiceItem("Massage", Icons.spa),
+    ServiceItem("Therapy", Icons.healing),
+    ServiceItem("Plumbers", Icons.plumbing),
+    ServiceItem("Gardening", Icons.grass),
+    ServiceItem("Pet Care", Icons.pets),
+    ServiceItem("Laundry", Icons.local_laundry_service),
+    ServiceItem("Moving", Icons.move_to_inbox),
+    ServiceItem("Cooking", Icons.kitchen),
+    ServiceItem("Tutoring", Icons.school),
   ];
+
+  String searchQuery = "";
+
+  // Colors
+  final Color primaryColor = Color(0xFF26547D);
+  final Color secondaryColor = Color(0xFFEF436B);
+  final Color accentColor = Color(0xFFFFCE5C);
+  final Color backgroundColor = Color(0xFFFFF5EB);
+  final Color successColor = Color(0xFF05C793);
 
   @override
   Widget build(BuildContext context) {
+    final filteredServices = services
+        .where((service) => service.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
+        title: Text(
+          "Services",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          "Services",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Search your service here...",
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: backgroundColor,
+                        hintText: "Search your service here...",
+                        hintStyle: TextStyle(color: primaryColor.withOpacity(0.6)),
+                        prefixIcon: Icon(Icons.search, color: primaryColor),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    IconButton(
-                      icon: Icon(Icons.filter_list, color: Colors.green),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Available Services",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 0.8,
-                ),
-                itemCount: services.length,
-                itemBuilder: (context, index) {
-                  final service = services[index];
-                  return GestureDetector(
-                    onTap: () {Navigator.push(context,MaterialPageRoute(builder: (context) => MechanicsListPage(serviceName: service.name),),);},
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: service.color.withOpacity(0.2),
-                            child: Icon(service.icon, color: service.color, size: 30),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            service.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                  SizedBox(width: 10),
+                  IconButton(
+                    icon: Icon(Icons.filter_list, color: successColor),
+                    onPressed: () {
+                      // Add filter functionality
+                    },
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                "Available Services",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: primaryColor,
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 1,
+                  ),
+                  itemCount: filteredServices.length,
+                  itemBuilder: (context, index) {
+                    final service = filteredServices[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MechanicsListPage(serviceName: service.name),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: secondaryColor.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: accentColor,
+                              child: Icon(service.icon, color: primaryColor, size: 20),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              service.name,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -138,7 +180,6 @@ class ServicesPage extends StatelessWidget {
 class ServiceItem {
   final String name;
   final IconData icon;
-  final Color color;
 
-  ServiceItem(this.name, this.icon, this.color);
+  ServiceItem(this.name, this.icon);
 }

@@ -6,6 +6,11 @@ class AddressBookPage extends StatefulWidget {
 }
 
 class _AddressBookPageState extends State<AddressBookPage> {
+  final Color primaryColor = Color(0xFF26547D);
+  final Color secondaryColor = Color(0xFFEF436B);
+  final Color accentColor = Color(0xFFFFCE5C);
+  final Color backgroundColor = Color(0xFFFFF5EB);
+
   final List<String> addresses = [
     "123 Main Street, Springfield, USA",
     "456 Elm Street, Gotham, USA",
@@ -16,8 +21,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: Text("Address Book"),
+        backgroundColor: primaryColor,
+        title: Text("Address Book",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,9 +33,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
             Text(
               "Saved Addresses",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal,
+                color: primaryColor,
               ),
             ),
             SizedBox(height: 16),
@@ -39,18 +45,25 @@ class _AddressBookPageState extends State<AddressBookPage> {
                 child: Text(
                   "No addresses added yet. Tap 'Add New Address' to get started!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Colors.grey[700], fontSize: 16),
                 ),
               )
                   : ListView.builder(
                 itemCount: addresses.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    elevation: 2,
+                    color: backgroundColor,
+                    elevation: 4,
                     margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: ListTile(
-                      title: Text(addresses[index]),
-                      leading: Icon(Icons.location_on, color: Colors.red),
+                      leading: Icon(Icons.location_on, color: secondaryColor),
+                      title: Text(
+                        addresses[index],
+                        style: TextStyle(color: primaryColor),
+                      ),
                       trailing: IconButton(
                         icon: Icon(Icons.delete, color: Colors.grey),
                         onPressed: () {
@@ -76,10 +89,15 @@ class _AddressBookPageState extends State<AddressBookPage> {
                 onPressed: () {
                   _showAddAddressDialog(context);
                 },
-                icon: Icon(Icons.add),
-                label: Text("Add New Address"),
+                icon: Icon(Icons.add,color: Colors.white,),
+                label: Text("Add New Address",style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
+                  backgroundColor: secondaryColor,
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
@@ -96,7 +114,9 @@ class _AddressBookPageState extends State<AddressBookPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Add New Address"),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text("Add New Address", style: TextStyle(color: Colors.white)),
           content: TextField(
             controller: addressController,
             decoration: InputDecoration(
@@ -110,7 +130,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
               },
-              child: Text("Cancel"),
+              child: Text("Cancel", style: TextStyle(color: primaryColor)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -135,7 +155,12 @@ class _AddressBookPageState extends State<AddressBookPage> {
                   );
                 }
               },
-              child: Text("Add"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: Text("Add",style: TextStyle(color: Colors.white),),
             ),
           ],
         );

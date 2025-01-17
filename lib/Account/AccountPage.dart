@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mr_kazi/Account/AddressBookPage.dart';
 import 'package:mr_kazi/Account/ContactPreferencesPage.dart';
 import 'package:mr_kazi/Account/GiftCardsAndVoucherPage.dart';
+import 'package:mr_kazi/Account/MyDetailsPage.dart';
 import 'package:mr_kazi/Account/NeedHelpPage.dart';
+import 'package:mr_kazi/Account/PaymentMethodsPage.dart';
 import 'package:mr_kazi/Account/PremierDeliveryPage.dart';
 import 'package:mr_kazi/Account/SocialAccountsPage.dart';
 import 'package:mr_kazi/Account/TellUsWhatYouThinkPage.dart';
-import 'package:mr_kazi/Intro/SigninScreen.dart';
 
 
 class AccountPage extends StatelessWidget {
@@ -87,9 +88,9 @@ class AccountPage extends StatelessWidget {
                   SizedBox(height: 16),
                   _buildListTile(context, Icons.shopping_bag, "My Order", Colors.blue, () {}),
                   _buildListTile(context, Icons.delivery_dining, "Premier Delivery", Colors.teal, () {Navigator.push(context, MaterialPageRoute(builder: (context) => PremierDeliveryPage()),);}),
-                  _buildListTile(context, Icons.person, "My Details", Colors.purple, () {}),
+                  _buildListTile(context, Icons.person, "My Details", Colors.purple, () {Navigator.push(context, MaterialPageRoute(builder: (context) => MyDetailsPage()),);}),
                   _buildListTile(context, Icons.location_on, "Address Book", Colors.red, () {Navigator.push(context, MaterialPageRoute(builder: (context) => AddressBookPage()),);}),
-                  _buildListTile(context, Icons.payment, "Payment Methods", Colors.green, () {}),
+                  _buildListTile(context, Icons.payment, "Payment Methods", Colors.green, () {Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentMethodsPage()),);}),
                   _buildListTile(context, Icons.notifications, "Contact Preferences", Colors.orange, () {Navigator.push(context, MaterialPageRoute(builder: (context) => ContactPreferencesPage()),);}),
                   _buildListTile(context, Icons.share, "Social Accounts", Colors.indigo, () {Navigator.push(context, MaterialPageRoute(builder: (context) => SocialAccountsPage()),);}),
                   Divider(),
@@ -157,7 +158,7 @@ class AccountPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SigninScreen()),);
+                    Navigator.pushNamed(context, '/home'); // Add logout functionality here
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF44336),

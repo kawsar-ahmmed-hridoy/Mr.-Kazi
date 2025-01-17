@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mr_kazi/Home/Kazi_AI.dart';
+import 'package:mr_kazi/Home/MechanicsListPage.dart';
+import 'package:mr_kazi/Home/RecentlyDiagonsticResultsPage.dart';
 import 'package:mr_kazi/Home/ServicesPage.dart';
+import 'package:mr_kazi/Home/TrendingServicesPage.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +22,15 @@ class _HomePageState extends State<HomePage> {
   final Color accentColor = Color(0xFFFFCE5C);
   final Color backgroundColor = Color(0xFFFFF5EB);
   final Color successColor = Color(0xFF05C793);
+
+  void bookNow() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Booking confirmed! Mechanic will contact you soon."),
+        backgroundColor: successColor,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -131,25 +144,25 @@ class _HomePageState extends State<HomePage> {
                           title: "Expert Plumbers, Affordable Rates",
                           discount: "10% OFF",
                           imagePath: 'assets/Community/1.jpg',
-                          onPressed: () {},
+                          onPressed: bookNow,
                         ),
                         _bannerPage(
                           title: "Home Cleaning Services",
                           discount: "15% OFF",
                           imagePath: 'assets/Community/2.jpg',
-                          onPressed: () {},
+                          onPressed: bookNow,
                         ),
                         _bannerPage(
                           title: "AC Repair at Best Prices",
                           discount: "20% OFF",
                           imagePath: 'assets/Community/3.jpg',
-                          onPressed: () {},
+                          onPressed: bookNow,
                         ),
                         _bannerPage(
                           title: "Home Appliance Repair at Best Prices",
                           discount: "30% OFF",
                           imagePath: 'assets/Community/4.jpg',
-                          onPressed: () {},
+                          onPressed: bookNow,
                         ),
                       ],
                     ),
@@ -171,21 +184,60 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _serviceIcon(Icons.car_repair, "Car repair"),
-                      _serviceIcon(Icons.electrical_services, "Electricity"),
-                      _serviceIcon(Icons.ac_unit, "AC Repair"),
-                      _serviceIcon(Icons.computer, "Computer"),
+                      _serviceIcon(Icons.car_repair, "Car repair", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MechanicsListPage(serviceName: "Car Repair"),
+                          ),
+                        );
+                      }),
+                      _serviceIcon(Icons.electrical_services, "Electricity", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MechanicsListPage(serviceName: "Electricity"),
+                          ),
+                        );
+                      }),
+                      _serviceIcon(Icons.ac_unit, "AC Repair", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MechanicsListPage(serviceName: "AC Repair"),
+                          ),
+                        );
+                      }),
+                      _serviceIcon(Icons.computer, "Computer", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MechanicsListPage(serviceName: "Computer"),
+                          ),
+                        );
+                      }),
                     ],
                   ),
+
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Trending services", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor)),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TrendingServicesPage()),
+                          );
+                        },
                         child: Text("View all", style: TextStyle(color: secondaryColor)),
                       ),
+
                     ],
                   ),
                   SizedBox(height: 10),
@@ -208,11 +260,17 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Recently diagnostic results", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text("Recently diagnostic results", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor)),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => RecentlyDiagnosticResultsPage()),
+                          );
+                        },
                         child: Text("View all", style: TextStyle(color: secondaryColor)),
                       ),
+
                     ],
                   ),
                   SizedBox(height: 10),
@@ -233,17 +291,29 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "High Blood Pressure",
+                          "Phone Problem",
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: primaryColor),
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "Please consult with a doctor for further analysis and medication.",
+                          "Please consult with a Mechanic for further analysis.",
                           style: TextStyle(fontSize: 14, color: Colors.grey[800]),
                         ),
                         SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DiagnosticDetailsPage(
+                                  title: "Phone Problem",
+                                  description: "Please consult with a Mechanic for further analysis.",
+                                  date: "18.01.2025",
+                                  severity: "High",
+                                ),
+                              ),
+                            );
+                          },
                           child: Text("View Details", style: TextStyle(color: Colors.white),),
                           style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
                         ),
@@ -299,18 +369,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _serviceIcon(IconData icon, String label) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundColor: accentColor.withOpacity(0.2),
-          child: Icon(icon, color: primaryColor),
-        ),
-        SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 14, color: primaryColor)),
-      ],
+  Widget _serviceIcon(IconData icon, String label, VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: accentColor.withOpacity(0.2),
+            child: Icon(icon, color: primaryColor),
+          ),
+          SizedBox(height: 8),
+          Text(label, style: TextStyle(fontSize: 14, color: primaryColor)),
+        ],
+      ),
     );
   }
+
 
   Widget _trendingService(String title, String price, String rating, String imagePath) {
     return Container(

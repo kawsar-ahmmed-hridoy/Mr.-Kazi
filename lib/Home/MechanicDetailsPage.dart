@@ -11,6 +11,12 @@ class MechanicDetailsPage extends StatefulWidget {
 }
 
 class _MechanicDetailsPageState extends State<MechanicDetailsPage> {
+  final Color primaryColor = Color(0xFF26547D);
+  final Color secondaryColor = Color(0xFFEF436B);
+  final Color accentColor = Color(0xFFFFCE5C);
+  final Color backgroundColor = Color(0xFFFFF5EB);
+  final Color successColor = Color(0xFF05C793);
+
   final List<String> reviews = [
     "Great service! Highly recommended.",
     "Very professional and punctual.",
@@ -38,12 +44,6 @@ class _MechanicDetailsPageState extends State<MechanicDetailsPage> {
     }
   }
 
-  void initiateVideoCall() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Video call feature is under development.")),
-    );
-  }
-
   void callMechanic() async {
     final url = "tel:${widget.mechanic.contact}";
     if (await canLaunch(url)) {
@@ -58,8 +58,17 @@ class _MechanicDetailsPageState extends State<MechanicDetailsPage> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw "Could not send the message.";
+      throw "Could not open the messaging app.";
     }
+  }
+
+  void bookNow() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Booking confirmed! Mechanic will contact you soon."),
+        backgroundColor: successColor,
+      ),
+    );
   }
 
   @override
@@ -68,132 +77,153 @@ class _MechanicDetailsPageState extends State<MechanicDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(mechanic.name),
-        backgroundColor: Colors.blueAccent,
+        title: Text(mechanic.name,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+        backgroundColor: primaryColor,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Mechanic Image
-            Container(
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-                child: Image.network(
-                  mechanic.photoUrl,
-                  height: 200,
-                  fit: BoxFit.cover,
+      body: Container(
+        color: backgroundColor,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Mechanic Image
+              Container(
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+                  child: Image.network(
+                    mechanic.photoUrl,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
+              SizedBox(height: 16),
 
-            // Mechanic Information Section
-            _buildSectionBox(
-              title: "Personal Information",
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Name: ${mechanic.name}", style: _infoTextStyle),
-                  Text("Rating: ${mechanic.rating.toStringAsFixed(1)} ★", style: _infoTextStyle),
-                  Text("Fee: \$${mechanic.fee.toStringAsFixed(2)}", style: _infoTextStyle),
-                  Text("Availability: ${mechanic.availability}", style: _infoTextStyle),
-                ],
+              // Mechanic Information Section
+              _buildSectionBox(
+                title: "Personal Information",
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Name: ${mechanic.name}", style: _infoTextStyle),
+                    Text("Rating: ${mechanic.rating.toStringAsFixed(1)} ★", style: _infoTextStyle),
+                    Text("Fee: \$${mechanic.fee.toStringAsFixed(2)}", style: _infoTextStyle),
+                    Text("Availability: ${mechanic.availability}", style: _infoTextStyle),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 16),
+              SizedBox(height: 16),
 
-            // Contact Options Section
-            _buildSectionBox(
-              title: "Contact Options",
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: callMechanic,
-                    icon: Icon(Icons.phone),
-                    label: Text("Call"),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: messageMechanic,
-                    icon: Icon(Icons.message),
-                    label: Text("Message"),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: initiateVideoCall,
-                    icon: Icon(Icons.video_call),
-                    label: Text("Video Call"),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-
-            // Map Section
-            _buildSectionBox(
-              title: "Location",
-              content: GestureDetector(
-                onTap: openLocation,
-                child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: NetworkImage("assets/Home/map.jpg"),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.4), BlendMode.darken),
+              // Contact Options Section
+              _buildSectionBox(
+                title: "Contact Options",
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: callMechanic,
+                      icon: Icon(Icons.phone,color: Colors.white),
+                      label: Text("Call",style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(backgroundColor: successColor),
                     ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Tap to view its locations in Google Maps",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                    ElevatedButton.icon(
+                      onPressed: callMechanic,
+                      icon: Icon(Icons.video_call,color: Colors.white),
+                      label: Text("Video Call",style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(backgroundColor: accentColor),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: messageMechanic,
+                      icon: Icon(Icons.message,color: Colors.white,),
+                      label: Text("Message",style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+
+              _buildSectionBox(
+                title: "Location",
+                content: GestureDetector(
+                  onTap: openLocation,
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      image: DecorationImage(
+                        image: NetworkImage("assets/Home/map.jpg"),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.4), BlendMode.darken),
                       ),
-                      textAlign: TextAlign.center,
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Tap to view its locations in Google Maps",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
+              SizedBox(height: 16),
 
-            // Review Section
-            _buildSectionBox(
-              title: "Public Reviews",
-              content: Column(
-                children: reviews
-                    .map((review) => ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                  title: Text(review),
-                ))
-                    .toList(),
+              // Review Section
+              _buildSectionBox(
+                title: "Public Reviews",
+                content: Column(
+                  children: reviews
+                      .map((review) => ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(Icons.person),
+                      backgroundColor: secondaryColor,
+                    ),
+                    title: Text(review),
+                  ))
+                      .toList(),
+                ),
               ),
-            ),
-            SizedBox(height: 16),
+              SizedBox(height: 16),
 
-            // Add Review Section
-            _buildSectionBox(
-              title: "Add a Review",
-              content: TextField(
-                controller: reviewController,
-                decoration: InputDecoration(
-                  hintText: "Write your review here",
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send, color: Colors.blue),
-                    onPressed: addReview,
+              // Add Review Section
+              _buildSectionBox(
+                title: "Add a Review",
+                content: TextField(
+                  controller: reviewController,
+                  decoration: InputDecoration(
+                    hintText: "Write your review here",
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.send, color: primaryColor),
+                      onPressed: addReview,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+
+              // Book Now Button
+              Center(
+                child: ElevatedButton(
+                  onPressed: bookNow,
+                  child: Text("Book Now",style: TextStyle(color: Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: secondaryColor,
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
@@ -218,7 +248,7 @@ class _MechanicDetailsPageState extends State<MechanicDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor)),
           SizedBox(height: 8),
           content,
         ],
@@ -226,7 +256,7 @@ class _MechanicDetailsPageState extends State<MechanicDetailsPage> {
     );
   }
 
-  TextStyle get _infoTextStyle => TextStyle(fontSize: 16, color: Colors.black87);
+  TextStyle get _infoTextStyle => TextStyle(fontSize: 16, color: primaryColor);
 }
 
 class Mechanic {

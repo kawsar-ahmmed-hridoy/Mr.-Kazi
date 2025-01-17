@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+final Color primaryColor = Color(0xFF26547D);
+final Color secondaryColor = Color(0xFFEF436B);
+final Color accentColor = Color(0xFFFFCE5C);
+final Color backgroundColor = Color(0xFFFFF5EB);
+final Color successColor = Color(0xFF05C793);
+
 class NeedHelpPage extends StatelessWidget {
   final List<Map<String, String>> faqs = [
     {"question": "How do I cancel an existing order?", "answer": "Go to your orders and select cancel."},
@@ -19,14 +25,14 @@ class NeedHelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text("Help Center🔥"),
+        backgroundColor: primaryColor,
+        title: Text("Help Center"),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous page
+            Navigator.pop(context);
           },
         ),
       ),
@@ -39,7 +45,7 @@ class NeedHelpPage extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   hintText: "Search for topics or questions...",
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: Icon(Icons.search, color: primaryColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -48,7 +54,7 @@ class NeedHelpPage extends StatelessWidget {
               SizedBox(height: 24),
               Text(
                 "Frequently Asked",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor),
               ),
               SizedBox(height: 8),
               Container(
@@ -62,7 +68,7 @@ class NeedHelpPage extends StatelessWidget {
                       width: 200,
                       margin: EdgeInsets.only(right: 16),
                       decoration: BoxDecoration(
-                        color: index % 2 == 0 ? Colors.cyanAccent : Colors.blueAccent,
+                        color: accentColor.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Padding(
@@ -75,6 +81,7 @@ class NeedHelpPage extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
+                                color: Colors.black,
                               ),
                             ),
                           ],
@@ -87,7 +94,7 @@ class NeedHelpPage extends StatelessWidget {
               SizedBox(height: 24),
               Text(
                 "Topics",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor),
               ),
               SizedBox(height: 8),
               Expanded(
@@ -115,24 +122,14 @@ class NeedHelpPage extends StatelessWidget {
                       ),
                       child: ListTile(
                         leading: Icon(
-                          topic['icon'] == 'box'
-                              ? Icons.inventory_2
-                              : topic['icon'] == 'local_shipping'
-                              ? Icons.local_shipping
-                              : topic['icon'] == 'credit_card'
-                              ? Icons.credit_card
-                              : topic['icon'] == 'track_changes'
-                              ? Icons.track_changes
-                              : topic['icon'] == 'settings'
-                              ? Icons.settings
-                              : Icons.local_offer,
-                          color: Colors.blue,
+                          _getIconForTopic(topic['icon']!),
+                          color: primaryColor,
                         ),
                         title: Text(
                           topic['title']!,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         ),
-                        subtitle: Text(topic['articles']!),
+                        subtitle: Text(topic['articles']!, style: TextStyle(color: Colors.grey[700])),
                         onTap: () {
                           // Handle navigation to topic articles
                         },
@@ -146,13 +143,19 @@ class NeedHelpPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Handle conversation initiation
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Starting a conversation..."),
+                        backgroundColor: successColor,
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: secondaryColor,
                   ),
                   child: Text(
                     "Start a conversation",
@@ -165,5 +168,24 @@ class NeedHelpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _getIconForTopic(String icon) {
+    switch (icon) {
+      case 'box':
+        return Icons.inventory_2;
+      case 'local_shipping':
+        return Icons.local_shipping;
+      case 'credit_card':
+        return Icons.credit_card;
+      case 'track_changes':
+        return Icons.track_changes;
+      case 'settings':
+        return Icons.settings;
+      case 'local_offer':
+        return Icons.local_offer;
+      default:
+        return Icons.help_outline;
+    }
   }
 }
