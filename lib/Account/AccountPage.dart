@@ -8,6 +8,7 @@ import 'package:mr_kazi/Account/PaymentMethodsPage.dart';
 import 'package:mr_kazi/Account/PremierDeliveryPage.dart';
 import 'package:mr_kazi/Account/SocialAccountsPage.dart';
 import 'package:mr_kazi/Account/TellUsWhatYouThinkPage.dart';
+import 'package:mr_kazi/Intro/SigninScreen.dart';
 
 
 class AccountPage extends StatelessWidget {
@@ -173,7 +174,7 @@ class AccountPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: () => Navigator.pop(context), // Close the dialog
+                  onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => SigninScreen()));},
                   child: const Text(
                     'Cancel',
                     style: TextStyle(color: Colors.grey),
