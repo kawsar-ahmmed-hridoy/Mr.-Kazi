@@ -11,13 +11,14 @@ class Kazi_AI extends StatefulWidget {
 }
 
 class _Kazi_AIState extends State<Kazi_AI> {
-  final Color primaryColor = Color(0xFF26547D);
-  final Color backgroundColor = Color(0xFFFFF5EB);
-  final Color successColor = Color(0xFF05C793);
-  final List<Map<String, dynamic>> _chatMessages = []; // Chat messages
+  final Color primaryColor = const Color(0xFF26547D);
+  final Color backgroundColor = const Color(0xFFEEFDFF);
+  final Color successColor = const Color(0xFF05C793);
+  final List<Map<String, dynamic>> _chatMessages = [];
   final TextEditingController _messageController = TextEditingController();
   String? _attachedFileName;
   String? _attachedFileType;
+  bool _isTyping = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +48,6 @@ class _Kazi_AIState extends State<Kazi_AI> {
       ),
       body: Stack(
         children: [
-          // Background gradient
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.white, Colors.white],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-
-          // Semi-transparent image
           Center(
             child: Opacity(
               opacity: 0.3,
@@ -70,7 +59,6 @@ class _Kazi_AIState extends State<Kazi_AI> {
               ),
             ),
           ),
-          // Main content
           Column(
             children: [
               Expanded(
@@ -86,73 +74,65 @@ class _Kazi_AIState extends State<Kazi_AI> {
                   },
                 ),
               ),
-              // Input Area
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-                decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.8),
-                  border: Border(
-                    top: BorderSide(color: Colors.grey.shade300, width: 1.0),
+              if (_isTyping)
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: const Text(
+                    "Mr. Kazi.AI is typing...",
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    _actionButton(
-                      Icons.mic,
-                      "Voice Input",
-                          () => _requestMicrophonePermission(context),
-                    ),
-                    _actionButton(
-                      Icons.photo_camera,
-                      "Attach Photo",
-                          () => _pickFile(context, ["jpg", "png", "jpeg"]),
-                    ),
-                    _actionButton(
-                      Icons.videocam,
-                      "Attach Video",
-                          () => _pickFile(context, ["mp4", "mov"]),
-                    ),
-                    _actionButton(
-                      Icons.picture_as_pdf,
-                      "Attach PDF",
-                          () => _pickFile(context, ["pdf"]),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: InputDecoration(
-                          hintText: "Type your message...",
-                          hintStyle: TextStyle(color: Colors.grey[500]),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 12.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    ElevatedButton(
-                      onPressed: _sendMessage,
-                      style: ElevatedButton.styleFrom(
-                        elevation: 3,
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-                      ),
-                      child: const Icon(Icons.send, color: Colors.blue,),
-                    ),
-                  ],
-                ),
-              ),
+              _buildInputArea(),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputArea() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      decoration: BoxDecoration(
+        color: primaryColor.withOpacity(0.8),
+        border: Border(
+          top: BorderSide(color: Colors.grey.shade300, width: 1.0),
+        ),
+      ),
+      child: Row(
+        children: [
+          _actionButton(Icons.mic, "Voice Input", () => _requestMicrophonePermission(context)),
+          _actionButton(Icons.photo_camera, "Attach Photo", () => _pickFile(context, ["jpg", "png", "jpeg"])),
+          _actionButton(Icons.videocam, "Attach Video", () => _pickFile(context, ["mp4", "mov"])),
+          _actionButton(Icons.picture_as_pdf, "Attach PDF", () => _pickFile(context, ["pdf"])),
+          Expanded(
+            child: TextField(
+              controller: _messageController,
+              decoration: InputDecoration(
+                hintText: "Type your message...",
+                hintStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10.0),
+          ElevatedButton(
+            onPressed: _sendMessage,
+            style: ElevatedButton.styleFrom(
+              elevation: 3,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            ),
+            child: const Icon(Icons.send, color: Colors.blue),
           ),
         ],
       ),
@@ -178,7 +158,6 @@ class _Kazi_AIState extends State<Kazi_AI> {
           _attachedFileName = result.files.single.name;
           _attachedFileType = result.files.single.extension;
         });
-
         _showSnackbar(context, "File attached: $_attachedFileName");
       } else {
         _showSnackbar(context, "File selection canceled.");
@@ -217,43 +196,44 @@ class _Kazi_AIState extends State<Kazi_AI> {
     setState(() {
       _chatMessages.add({'text': fullMessage, 'isUser': true});
       _messageController.clear();
-      _attachedFileName = null; // Clear file after sending
+      _attachedFileName = null;
       _attachedFileType = null;
     });
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       _replyToMessage();
     });
   }
 
   void _replyToMessage() {
-    const replyDescription =
-        "Here's some information based on your query:";
-    const replyVideoLink = "Watch this video for more: https://youtu.be/example";
-    const replyMechanicContacts =
-        "Nearby mechanic contacts:\n- John Doe: +1 234-567-8901\n- Jane Smith: +1 987-654-3210";
-    const replyLocations = "Nearby locations:\n- XYZ Garage, 2 miles\n- ABC Workshop, 3 miles";
+    setState(() => _isTyping = true);
 
-    final replies = [
-      {'text': replyDescription, 'isUser': false},
-      {'text': replyVideoLink, 'isUser': false},
-      {'text': replyMechanicContacts, 'isUser': false},
-      {'text': replyLocations, 'isUser': false},
+    final firstReplies = [
+      {'text': "Here's some information based on your query:", 'isUser': false},
+      {'text': "Watch this video for solution:\nhttps://youtu.be/example1\nhttps://youtu.be/example2\nhttps://youtu.be/example3", 'isUser': false},
+      {'text': "Nearby mechanic's contacts:\n- Rahim Mechanic: +8801604030690\n- Jawad Bhai: +8801648956855\n- Hridoy Mama: +8801714440146", 'isUser': false},
+      {'text': "Nearby locations:\n- Rahim Garage, 1.5 miles\n- Jawad Workshop, 2 miles\n- Hridoy Garage, 3 miles", 'isUser': false},
     ];
 
+    final secondReplies = [
+      {'text': "You can also try these responses:", 'isUser': false},
+      {'text': "Check the documents for details:\n- 📎SolutionA.pdf\n- 📎SolutionB.pdf\n- 📎SolutionC.pdf", 'isUser': false},
+    ];
+
+    List<Map<String, dynamic>> replies = _chatMessages.length % 2 == 1 ? firstReplies : secondReplies;
+
     for (int i = 0; i < replies.length; i++) {
-      Future.delayed(Duration(seconds: (i + 1) * 2), () {
+      Future.delayed(Duration(seconds: (i + 1)), () {
         setState(() {
           _chatMessages.add(replies[i]);
+          if (i == replies.length - 1) _isTyping = false;
         });
       });
     }
   }
 
   void _showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 }
 

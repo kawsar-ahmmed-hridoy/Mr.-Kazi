@@ -13,7 +13,7 @@ class Page1 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 50), Image.asset("assets/Initial/explore.png", height: 200), SizedBox(height: 20),
-            Text("View product 360 degrees", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),), Text("You can see the product with all angles."),
+            Text("View services 360 degrees", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),), Text("You can see the solution from all angles."),
             SizedBox(height: 50),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [_buildDot(true), _buildDot(false), _buildDot(false),],),
           ],
